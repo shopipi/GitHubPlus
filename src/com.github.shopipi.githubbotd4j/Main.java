@@ -50,8 +50,8 @@ public class Main
 	public void onMsgRecv(MessageReceivedEvent e)
 	{
 		Date date = new Date();
-    SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd - HH:mm:ss");
-    String fDate = format.format(date);
+    		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd - HH:mm:ss");
+    		String fDate = format.format(date);
 
 		try
 		{

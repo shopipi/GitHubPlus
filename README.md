@@ -1,2 +1,2 @@
 # GitHubBot-D4J
-Display Simple GitHub Log
+Discord BOT - Display Simple GitHub Log

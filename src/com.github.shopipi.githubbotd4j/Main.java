@@ -104,7 +104,10 @@ public class Main
 
     public static String getMentionString(String githubName)
     {
-        // ************
+        if (githubName.equalsIgnoreCase("shopipi"))
+		{
+            return "<@*************>";
+		}
         return "";
     }
 }

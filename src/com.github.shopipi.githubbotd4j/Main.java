@@ -20,9 +20,6 @@ public class Main
 {
     private static String TOKEN = "*****************************************";
     private static IDiscordClient client;
-
-    Discord4JLogger logger = new Discord4JLogger("");
-
     private static long sendChannelId = *****************L;
 
     public static void main(String[] args)

@@ -1,2 +1,3 @@
-# GitHubBot-D4J
-Discord BOT - Display Simple GitHub Log
+# GitHub+ BOT for Discord
+Summaryのコメントと更新があったファイル名を表示します。
+プライベートレポジトリ対応。

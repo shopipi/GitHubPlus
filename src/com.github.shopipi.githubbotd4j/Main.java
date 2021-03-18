@@ -42,8 +42,6 @@ public class Main
     @EventSubscriber
     public void onCommand(MessageReceivedEvent e)
     {
-        if (e.getAuthor().getLongID() != 725140295330824203L) return;
-
         if (e.getMessage().getContent().startsWith("/"))
         {
             String command = e.getMessage().getContent().substring(1);

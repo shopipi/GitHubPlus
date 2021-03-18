@@ -1,26 +1,20 @@
-package com.github.shopipi.githubbotd4j;
+package com.github.shopipi.githubplus;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import sx.blah.discord.Discord4J.Discord4JLogger;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.ActivityType;
-import sx.blah.discord.handle.obj.IEmbed;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.StatusType;
 import sx.blah.discord.util.EmbedBuilder;
 
 public class Main
 {
-    private static String TOKEN = "*****************************************";
-    private static IDiscordClient client;
-    private static long sendChannelId = *****************L;
+    private static String TOKEN = "***********************************************************";
+    public static IDiscordClient client;
+
+    public static long sendChannelId = ******************L;
 
     public static void main(String[] args)
     {
@@ -31,6 +25,7 @@ public class Main
     {
         client = new ClientBuilder().withToken(TOKEN).build();
         client.getDispatcher().registerListener(new Main());
+        client.getDispatcher().registerListener(new GitHubMessageListener());
         client.login();
     }
 
@@ -40,74 +35,47 @@ public class Main
         print("###########");
         print("BOT STARTED");
         print("###########");
-        client.changePresence(StatusType.ONLINE, ActivityType.PLAYING, "Display Simple GitHub Log");
+
+        client.changePresence(StatusType.ONLINE, ActivityType.PLAYING, "/? for Help");
     }
 
     @EventSubscriber
-    public void onMsgRecv(MessageReceivedEvent e)
+    public void onCommand(MessageReceivedEvent e)
     {
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd - HH:mm:ss");
-        String fDate = format.format(date);
+        if (e.getAuthor().getLongID() != 725140295330824203L) return;
 
-        try
+        if (e.getMessage().getContent().startsWith("/"))
         {
-            IMessage msg = e.getMessage();
-            IUser user   = e.getAuthor();
+            String command = e.getMessage().getContent().substring(1);
 
-            if (user == client) return;
-            if (!user.isBot()) return;
-            if (!user.getName().contains("GitHub")) return;
-
-            IEmbed embed = msg.getEmbeds().get(0);
-
-            String[] descs = embed.getDescription().split("\n");
-
-            for (int i = 0; i < descs.length; i++)
+            if (command.equalsIgnoreCase("stop"))
             {
-                // ---------------------------------------------
-                // Get Summary Message
-                String desc   = descs[i];
-                int start     = desc.indexOf(" ") + 1;
-                desc          = desc.substring(start);
-                String author = desc.split(" - ")[1];
-                int end       = desc.lastIndexOf("-") - 1;
-                desc          = desc.substring(0, end);
-                // ---------------------------------------------
-
-                // ---------------------------------------------
-                // Get URL String
-                String url = descs[i];
-                int start1 = url.indexOf("(") + 1;
-                int end1   = url.indexOf(")");
-                url        = url.substring(start1, end1);
-                // ---------------------------------------------
-
-                EmbedBuilder embedBuilder = new EmbedBuilder()
-                        .withTitle(desc).withUrl(url)
-                        .withDesc("by " + getMentionString(author))
-                        .withFooterText(fDate)
-                        .withColor(125, 37, 138);
-
-                client.getChannelByID(sendChannelId).sendMessage(embedBuilder.build());
+                if (e.getAuthor().getLongID() == Developer.getDevByGitHubName("shopipi").getId())
+                {
+                    e.getChannel().sendMessage("Bye bye");
+                    client.logout();
+                }
             }
-        }
-        catch (IndexOutOfBoundsException ie)
-        {
+
+            if (command.equalsIgnoreCase("?"))
+            {
+                EmbedBuilder builder = new EmbedBuilder()
+                        .withAuthorIcon(client.getApplicationIconURL())
+                        .withAuthorName("GitHub+ BOT for Discord")
+                        .withAuthorUrl("https://github.com/shopipi/GitHubPlus")
+                        .withColor(0x6A2786)
+                        .appendDesc("```Summaryのコメントと更新があったファイル名を表示します \n")
+                        .appendDesc("プライベートレポジトリ対応 ```\n\n")
+                        .appendDesc("**ソースコード** \n")
+                        .appendDesc("https://github.com/shopipi/GitHubPlus");
+
+                e.getChannel().sendMessage(builder.build());
+            }
         }
     }
 
     public static void print(Object message)
     {
         System.out.println(message);
-    }
-
-    public static String getMentionString(String githubName)
-    {
-        if (githubName.equalsIgnoreCase("shopipi"))
-	{
-            return "<@*************>";
-	}
-        return "";
     }
 }

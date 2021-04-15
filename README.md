@@ -1,9 +1,9 @@
 <h1 align="center">GitHub+ BOT for Discord</h1>
 
 <p align="center">
-  <a href="#Overview">Overview</a> |
-  <a href="#Usage">Usage</a> |
-  <a href="#Reference">Reference</a>
+  <a href="#overview">Overview</a> |
+  <a href="#usage">Usage</a> |
+  <a href="#reference">Reference</a>
 </p>
 
 <p align="center">

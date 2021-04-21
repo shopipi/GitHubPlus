@@ -111,8 +111,7 @@ public class Config
 	{
 		try
 		{
-			List<String> lines = Files.readAllLines(Paths.get(path));
-			return lines;
+			return Files.readAllLines(Paths.get(path));
 		}
 		catch (IOException e)
 		{

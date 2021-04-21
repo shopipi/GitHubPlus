@@ -1,0 +1,35 @@
+package com.github.shopipi.githubplus;
+
+public class Language
+{
+	enum Message
+	{
+		Configをロードしました,
+		Configをリロードしました,
+		Configをリロードできませんでした,
+		ファイルが更新されました,
+		ファイル,
+		詳細
+	}
+
+	public static String getMsg(Message message)
+	{
+		String msg = null;
+
+		if (Main.language.equalsIgnoreCase("en"))
+		{
+			if (message == Message.Configをロードしました) msg = "Successfully Loaded Config";
+			if (message == Message.Configをリロードしました) msg = "Successfully Reloaded Config";
+			if (message == Message.Configをリロードできませんでした) msg = "Failed to Reload Config";
+			if (message == Message.ファイルが更新されました) msg = "New Commit";
+			if (message == Message.ファイル) msg = "File(s)";
+			if (message == Message.詳細) msg = "Detail";
+		}
+		else if (Main.language.equalsIgnoreCase("ja"))
+		{
+			return message.name();
+		}
+
+		return msg;
+	}
+}

@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <img alt="Screenshot" src="https://raw.githubusercontent.com/shopipi/GitHubPlus/main/GitHubPlus_Overview.png">
+  <img alt="Screenshot" src="GitHubPlus_Overview.png">
 </p>
 
 # Overview

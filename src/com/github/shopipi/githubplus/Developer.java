@@ -8,10 +8,12 @@ public class Developer
 	private long id;
 	private String gitHubName;
 
-	public static List<Developer> devs = new ArrayList<Developer>();
+	public static List<Developer> devs;
 
 	public static boolean init()
 	{
+		devs = new ArrayList<Developer>();
+
 		try
 		{
 			for (int i = 1; Config.getValue("dev" + i + "-discord-id") != null; i++)

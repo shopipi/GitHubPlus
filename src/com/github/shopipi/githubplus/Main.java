@@ -38,24 +38,7 @@ public class Main
 		if (Config.loadConfig())
 		{
 			Log.INFO(Language.getMsg(Message.Configをロードしました));
-			Log.INFO("----------------------------------------------------------------------------");
-			Log.INFO("# Config");
-			Log.INFO(Config.getConfigOptionNameFromEnum(OptionType.LANG) + ":                  " + language);
-			Log.INFO(Config.getConfigOptionNameFromEnum(OptionType.DISCORD_BOT_TOKEN) + ":     " + discordBotToken);
-			Log.INFO(Config.getConfigOptionNameFromEnum(OptionType.SEND_CHANNEL_ID) + ":       " + sendChannelId);
-			Log.INFO(Config.getConfigOptionNameFromEnum(OptionType.PERSONAL_ACCESS_TOKEN) + ": " + personalAccessToken);
-			Log.INFO(Config.getConfigOptionNameFromEnum(OptionType.OWNER) + ":                 " + owner);
-			Log.INFO(Config.getConfigOptionNameFromEnum(OptionType.REPO) + ":                  " + repo);
-			Log.INFO(Config.getConfigOptionNameFromEnum(OptionType.BRANCH) + ":                " + branch);
-			Log.INFO("----------------------------------------------------------------------------");
-			Log.INFO("# Developers");
-
-			for (Developer dev : Developer.devs)
-			{
-				Log.INFO(dev.getId() + " - " + dev.getGitHubName());
-			}
-
-			Log.INFO("----------------------------------------------------------------------------");
+			printConfigResult();
 		}
 		else
 		{
@@ -64,6 +47,28 @@ public class Main
 		}
 
 		initClient();
+	}
+
+	public static void printConfigResult()
+	{
+		Log.INFO("----------------------------------------------------------------------------");
+		Log.INFO("# Config");
+		Log.INFO(Config.getConfigOptionNameFromEnum(OptionType.LANG) + ":                  " + language);
+		Log.INFO(Config.getConfigOptionNameFromEnum(OptionType.DISCORD_BOT_TOKEN) + ":     " + discordBotToken);
+		Log.INFO(Config.getConfigOptionNameFromEnum(OptionType.SEND_CHANNEL_ID) + ":       " + sendChannelId);
+		Log.INFO(Config.getConfigOptionNameFromEnum(OptionType.PERSONAL_ACCESS_TOKEN) + ": " + personalAccessToken);
+		Log.INFO(Config.getConfigOptionNameFromEnum(OptionType.OWNER) + ":                 " + owner);
+		Log.INFO(Config.getConfigOptionNameFromEnum(OptionType.REPO) + ":                  " + repo);
+		Log.INFO(Config.getConfigOptionNameFromEnum(OptionType.BRANCH) + ":                " + branch);
+		Log.INFO("----------------------------------------------------------------------------");
+		Log.INFO("# Developers");
+
+		for (Developer dev : Developer.devs)
+		{
+			Log.INFO(dev.getId() + " - " + dev.getGitHubName());
+		}
+
+		Log.INFO("----------------------------------------------------------------------------\n");
 	}
 
 	private static void initClient()

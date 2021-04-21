@@ -19,8 +19,8 @@ public class GitHubMessageListener
 	public void onBotMsgRecieved(MessageReceivedEvent e)
 	{
 		Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd - HH:mm:ss");
-        String fDate = format.format(date);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd - HH:mm:ss");
+		String fDate = format.format(date);
 
 		try
 		{

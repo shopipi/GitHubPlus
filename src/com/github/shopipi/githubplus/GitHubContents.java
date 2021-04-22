@@ -4,7 +4,6 @@ public class GitHubContents
 {
 	public static String getFilename(String api_filename)
 	{
-		Main.print(api_filename);
 		return api_filename.substring(api_filename.lastIndexOf("/") + 1);
 	}
 

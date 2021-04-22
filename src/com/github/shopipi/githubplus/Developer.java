@@ -53,6 +53,11 @@ public class Developer
 
 	public String mention()
 	{
+		if (this.gitHubName.equalsIgnoreCase("N/A"))
+		{
+			return "@N/A";
+		}
+
 		return "<@" + this.id + ">";
 	}
 

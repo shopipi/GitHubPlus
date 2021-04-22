@@ -56,19 +56,28 @@ public class GitHubAPI
 			char[] b = new char[1024];
 			int line;
 
+			StringBuilder builder = new StringBuilder();
+
 			while (0 <= (line = reader.read(b)))
 			{
 				String text = new String(b, 0, line);
+				builder.append(text);
+			}
 
-				for (String ln : text.split("\n"))
+			for (String ln : builder.toString().split("\r|\n"))
+			{
+				ln = ln.replaceAll(" ", "").replaceAll(",", "");
+
+				if (ln.indexOf("\"") == -1) continue;
+				if (ln.contains("{"))       continue;
+
+				// Get Key Name
+				String key = ln.substring(ln.indexOf("\"") + 1, ln.indexOf("\"", 1));
+
+				if (key.equalsIgnoreCase(name))
 				{
-					if (ln.contains(name))
-					{
-						String split = ln.split("\": \"")[1];
-						int end = split.lastIndexOf("\"");
-						String value = split.substring(0, end);
-						result += value + ",";
-					}
+					String value = ln.substring(ln.lastIndexOf("\"", ln.length() - 2) + 1, ln.lastIndexOf("\""));
+					result += value + ",";
 				}
 			}
 
@@ -79,12 +88,13 @@ public class GitHubAPI
 		catch (ArrayIndexOutOfBoundsException ae)
 		{
 			Main.print("IOExceptArrayIndexOutOfBoundsExceptionion Error!!");
+			ae.printStackTrace();
 
-			Main.client.getChannelByID(Main.sendChannelId).sendMessage(":warning: 大量なファイルの更新がありました");
+			//Main.client.getChannelByID(Main.sendChannelId).sendMessage(":warning: 大量なファイルの更新がありました");
 		}
 		catch (IOException e)
 		{
-			Main.client.getChannelByID(Main.sendChannelId).sendMessage(":warning: 更新がありましたが読み込めませんでした");
+			//Main.client.getChannelByID(Main.sendChannelId).sendMessage(":warning: 更新がありましたが読み込めませんでした");
 		}
 
 		return result.split(",");

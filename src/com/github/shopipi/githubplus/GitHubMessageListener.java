@@ -33,12 +33,14 @@ public class GitHubMessageListener
 
 			IEmbed embed = msg.getEmbeds().get(0);
 
-			String[] descs = embed.getDescription().split("\n");
+			String[] embedDescs = embed.getDescription().split("\n");
 
 			if (!embed.getTitle().toLowerCase().contains(Main.repo.toLowerCase())) return;
 
-			for (String desc : descs)
+			// コミットの数だけ実行
+			for (String desc : embedDescs)
 			{
+				// ハッシュIDを取得
 				String sha = desc.substring
 				(
 					desc.indexOf("`") + 1,

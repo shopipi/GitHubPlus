@@ -19,7 +19,7 @@ public class GitHubAPI
 	 * @param personalAccessToken パーソナルアクセストークン
 	 * @param owner オーナー名
 	 * @param repo レポジトリ名
-	 * @param branch ブランチ
+	 * @param branch ブランチ / SHA
 	 */
 	public GitHubAPI(String personalAccessToken, String owner, String repo, String branch)
 	{

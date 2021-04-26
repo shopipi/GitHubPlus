@@ -11,6 +11,9 @@ public class GitHubAPI
 	public String repo;
 	public String branch;
 
+	private String commandResult;
+	private String result;
+
 	/**
 	 * GitHubAPIを使ってレポジトリの情報を取得します
 	 * @param personalAccessToken パーソナルアクセストークン
@@ -21,30 +24,30 @@ public class GitHubAPI
 	public GitHubAPI(String personalAccessToken, String owner, String repo, String branch)
 	{
 		this.personalAccessToken = personalAccessToken;
-		this.owner = owner;
-		this.repo = repo;
-		this.branch = branch;
+		this.owner               = owner;
+		this.repo                = repo;
+		this.branch              = branch;
+
+		this.processCommand();
 	}
 
 	/**
 	 * ConsoleCommandを生成します
 	 * @return ProcessBuilder用の String[]型
 	 */
-	public String[] getCommand()
+	private String[] getCommand()
 	{
-		String command = "curl -u :%P.A.T% https://api.github.com/repos/%owner%/%repo%/commits/%branch%"
-			.replaceAll("%P.A.T%", this.personalAccessToken)
-			.replaceAll("%owner%", this.owner)
-			.replaceAll("%repo%", this.repo)
+		this.commandResult = "curl -u :%P.A.T% https://api.github.com/repos/%owner%/%repo%/commits/%branch%"
+			.replaceAll("%P.A.T%",  this.personalAccessToken)
+			.replaceAll("%owner%",  this.owner)
+			.replaceAll("%repo%",   this.repo)
 			.replaceAll("%branch%", this.branch);
 
-		return command.split(" ");
+		return this.commandResult.split(" ");
 	}
 
-	public String[] getValues(String name)
+	private void processCommand()
 	{
-		String result = "";
-
 		try
 		{
 			ProcessBuilder processBuilder = new ProcessBuilder(this.getCommand());
@@ -64,7 +67,34 @@ public class GitHubAPI
 				builder.append(text);
 			}
 
-			for (String ln : builder.toString().split("\r|\n"))
+			this.result = builder.toString();
+
+			reader.close();
+			input.close();
+			process.destroy();
+		}
+		catch (IOException e)
+		{
+			Log.WARN("IOException Error!!");
+		}
+		catch (ArrayIndexOutOfBoundsException e)
+		{
+			Log.WARN("ArrayIndexOutOfBoundsException Error!!");
+		}
+	}
+
+	public String getValue(String name)
+	{
+		return this.getValues(name)[0];
+	}
+
+	public String[] getValues(String name)
+	{
+		String result = "";
+
+		try
+		{
+			for (String ln : this.result.split("\r|\n"))
 			{
 				ln = ln.replaceAll(" ", "").replaceAll(",", "");
 
@@ -76,25 +106,15 @@ public class GitHubAPI
 
 				if (key.equalsIgnoreCase(name))
 				{
+					// Get Value of Key
 					String value = ln.substring(ln.lastIndexOf("\"", ln.length() - 2) + 1, ln.lastIndexOf("\""));
 					result += value + ",";
 				}
 			}
-
-			reader.close();
-			input.close();
-			process.destroy();
 		}
-		catch (ArrayIndexOutOfBoundsException ae)
+		catch (ArrayIndexOutOfBoundsException e)
 		{
-			Main.print("IOExceptArrayIndexOutOfBoundsExceptionion Error!!");
-			ae.printStackTrace();
-
-			//Main.client.getChannelByID(Main.sendChannelId).sendMessage(":warning: 大量なファイルの更新がありました");
-		}
-		catch (IOException e)
-		{
-			//Main.client.getChannelByID(Main.sendChannelId).sendMessage(":warning: 更新がありましたが読み込めませんでした");
+			Main.print("ArrayIndexOutOfBoundsException Error!!");
 		}
 
 		return result.split(",");

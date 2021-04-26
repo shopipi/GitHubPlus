@@ -37,15 +37,20 @@ public class GitHubMessageListener
 
 			if (!embed.getTitle().toLowerCase().contains(Main.repo.toLowerCase())) return;
 
-			GitHubAPI api = new GitHubAPI(Main.personalAccessToken, Main.owner, Main.repo, Main.branch);
-
-			for (int i = 0; i < descs.length; i++)
+			for (String desc : descs)
 			{
-				String desc     = api.getValues("message")[0];
-				String author   = api.getValues("name")[0];
-				String url      = api.getValues("html_url")[0];
-				String commitID = api.getValues("sha")[0].substring(0, 8);
+				String sha = desc.substring
+				(
+					desc.indexOf("`") + 1,
+					desc.lastIndexOf("`")
+				);
 
+				GitHubAPI api = new GitHubAPI(Main.personalAccessToken, Main.owner, Main.repo, sha);
+
+				String summary  = api.getValue("message");
+				String author   = api.getValue("login");
+				String url      = api.getValue("html_url");
+				String commitID = "`" + api.branch + "`";
 
 				// Get Developer from Commit Author
 				Developer dev = Developer.getDevByGitHubName(author);
@@ -86,7 +91,7 @@ public class GitHubMessageListener
 					// Title and Commit Message EMBED
 					EmbedBuilder embed01 = new EmbedBuilder()
 							.withTitle(Language.getMsg(Message.ファイルが更新されました))
-							.appendDesc("```" + desc + "```\n")
+							.appendDesc("```" + summary + "```\n")
 							.withColor(color);
 
 					Main.client.getChannelByID(Main.sendChannelId).sendMessage("----------", embed01.build());
@@ -156,7 +161,7 @@ public class GitHubMessageListener
 					// if Filecount <= 10
 					EmbedBuilder embedBuilder = new EmbedBuilder()
 							.withTitle(Language.getMsg(Message.ファイルが更新されました))
-							.appendDesc("```" + desc + "```\n")
+							.appendDesc("```" + summary + "```\n")
 							.appendDesc(":scroll: **" + Language.getMsg(Message.ファイル) + "**： " + builder.toString().substring(0, builder.toString().length() - 2) + "\n\n")
 							.appendDesc(":link: **"   + Language.getMsg(Message.詳細) + "**： [" + commitID + "](" + url + ")\n\n")
 							.appendDesc(":bust_in_silhouette: " + dev.mention() + " - " + author)

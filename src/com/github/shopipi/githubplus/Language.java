@@ -21,7 +21,7 @@ public class Language
 			if (message == Message.Configをロードしました) msg = "Successfully Loaded Config";
 			if (message == Message.Configをリロードしました) msg = "Successfully Reloaded Config";
 			if (message == Message.Configをリロードできませんでした) msg = "Failed to Reload Config";
-			if (message == Message.ファイルが更新されました) msg = "New Commit";
+			if (message == Message.ファイルが更新されました) msg = "File(s) Updated";
 			if (message == Message.ファイル) msg = "File(s)";
 			if (message == Message.詳細) msg = "Detail";
 		}

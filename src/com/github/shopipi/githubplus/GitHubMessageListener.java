@@ -172,6 +172,15 @@ public class GitHubMessageListener
 
 					Main.client.getChannelByID(Main.sendChannelId).sendMessage(embedBuilder.build());
 				}
+
+				try
+				{
+					// Wait 1sec for Discord Rate Limit
+					Thread.sleep(1000);
+				}
+				catch (Exception e1)
+				{
+				}
 			}
 		}
 		catch (IndexOutOfBoundsException ie)

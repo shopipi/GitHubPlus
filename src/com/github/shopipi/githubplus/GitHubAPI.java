@@ -96,7 +96,8 @@ public class GitHubAPI
 		{
 			for (String ln : this.result.split("\r|\n"))
 			{
-				ln = ln.replaceAll(" ", "").replaceAll(",", "");
+//				ln = ln.replaceAll(" ", "").replaceAll(",", "");
+				ln = ln.replaceAll(",", "");
 
 				if (ln.indexOf("\"") == -1) continue;
 				if (ln.contains("{"))       continue;

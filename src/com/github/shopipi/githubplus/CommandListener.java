@@ -6,6 +6,12 @@ import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.util.EmbedBuilder;
 
+/**
+ *
+ * ユーザーからのコマンドを受けて処理する
+ * @author shopipi
+ *
+ */
 public class CommandListener
 {
 	@EventSubscriber

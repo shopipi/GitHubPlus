@@ -4,6 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+/**
+ *
+ * curlで取得した情報を分解して返却するクラス
+ * @author shopipi
+ *
+ */
 public class GitHubAPI
 {
 	public String personalAccessToken;
@@ -50,6 +56,7 @@ public class GitHubAPI
 	{
 		try
 		{
+			// ProcessBuilderでcurlを実行
 			ProcessBuilder processBuilder = new ProcessBuilder(this.getCommand());
 			Process process = processBuilder.start();
 
@@ -83,17 +90,28 @@ public class GitHubAPI
 		}
 	}
 
+	/**
+	 * 値を1件取得
+	 * @param name キー名
+	 * @return 値
+	 */
 	public String getValue(String name)
 	{
 		return this.getValues(name)[0];
 	}
 
+	/**
+	 * 値を複数取得
+	 * @param name キー名
+	 * @return 値配列
+	 */
 	public String[] getValues(String name)
 	{
 		String result = "";
 
 		try
 		{
+			// 分解
 			for (String ln : this.result.split("\r|\n"))
 			{
 				ln = ln.replaceAll(" ", "").replaceAll(",", "");

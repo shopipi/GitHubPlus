@@ -9,6 +9,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ *
+ * Configクラス
+ * @author shopipi
+ *
+ */
 public class Config
 {
 	enum OptionType
@@ -22,6 +28,10 @@ public class Config
 		BRANCH
 	}
 
+	/**
+	 * コンフィグが存在するかどうか
+	 * @return 存在
+	 */
 	public static boolean checkConfig()
 	{
 		if (Files.exists(Paths.get(Main.CONFIG_FILENAME))) return true;
@@ -31,6 +41,10 @@ public class Config
 		return true;
 	}
 
+	/**
+	 * Configファイルから設定を読み込み
+	 * @return 読み込み結果
+	 */
 	public static boolean loadConfig()
 	{
 		try
@@ -53,6 +67,11 @@ public class Config
 		return true;
 	}
 
+	/**
+	 * 設定を取得
+	 * @param optionType 設定項目
+	 * @return 設定値
+	 */
 	public static String getValue(OptionType optionType)
 	{
 		for (String line : readAllLine(Main.CONFIG_FILENAME))
@@ -66,6 +85,11 @@ public class Config
 		return null;
 	}
 
+	/**
+	 * 文字列から設定を取得
+	 * @param option 文字列
+	 * @return 設定値
+	 */
 	public static String getValue(String option)
 	{
 		for (String line : readAllLine(Main.CONFIG_FILENAME))
@@ -79,6 +103,12 @@ public class Config
 		return null;
 	}
 
+	/**
+	 * ファイルをダウンロードする
+	 * @param url URL
+	 * @param outFile 出力ファイル名
+	 * @return 結果
+	 */
 	public static boolean downloadFile(String url, String outFile)
 	{
 		try
@@ -107,6 +137,11 @@ public class Config
 		return false;
 	}
 
+	/**
+	 * ファイルの全ての行を取得
+	 * @param path ファイルパス
+	 * @return
+	 */
 	public static List<String> readAllLine(String path)
 	{
 		try
@@ -120,6 +155,11 @@ public class Config
 		return null;
 	}
 
+	/**
+	 * OptionTypeを文字列に変換
+	 * @param optionType
+	 * @return
+	 */
 	public static String getConfigOptionNameFromEnum(OptionType optionType)
 	{
 		return optionType.name().replaceAll("_", "-").toLowerCase();

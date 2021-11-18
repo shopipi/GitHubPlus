@@ -1,5 +1,11 @@
 package com.github.shopipi.githubplus;
 
+/**
+ *
+ * GitHubのURLなどから要素を取得するクラス
+ * @author shopipi
+ *
+ */
 public class GitHubContents
 {
 	public static String getFilename(String api_filename)

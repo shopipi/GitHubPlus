@@ -3,6 +3,12 @@ package com.github.shopipi.githubplus;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ *
+ * Loggerクラス
+ * @author shopipi
+ *
+ */
 public class Log
 {
 	private static String Log_Prefix(String level)

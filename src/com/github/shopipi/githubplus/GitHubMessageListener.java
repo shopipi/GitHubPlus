@@ -13,11 +13,18 @@ import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
+/**
+ *
+ *GitHub WebHookのメッセージを取得して処理するクラス
+ * @author shopipi
+ *
+ */
 public class GitHubMessageListener
 {
 	@EventSubscriber
 	public void onBotMsgRecieved(MessageReceivedEvent e)
 	{
+		// 日付・時刻の取得
 		Date date = new Date();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd - HH:mm:ss");
 		String fDate = format.format(date);
@@ -27,14 +34,22 @@ public class GitHubMessageListener
 			IMessage msg = e.getMessage();
 			IUser user   = e.getAuthor();
 
+			// 自信だった場合は無視
 			if (user == Main.client) return;
+
+			// BOTじゃなかったら無視
 			if (!user.isBot()) return;
+
+			// 名前にGitHubが入っていなかったら無視
 			if (!user.getName().contains("GitHub")) return;
 
+			// メッセージの埋め込み（Embed）を取得
 			IEmbed embed = msg.getEmbeds().get(0);
 
+			// Commitのタイトル配列
 			String[] embedDescs = embed.getDescription().split("\n");
 
+			// レポジトリ名が一致したらOK
 			if (!embed.getTitle().toLowerCase().contains(Main.repo.toLowerCase())) return;
 
 			// コミットの数だけ実行
@@ -47,6 +62,7 @@ public class GitHubMessageListener
 					desc.lastIndexOf("`")
 				);
 
+				// GitHubAPIクラスで項目を取得
 				GitHubAPI api = new GitHubAPI(Main.personalAccessToken, Main.owner, Main.repo, sha);
 
 				String summary  = api.getValue("message");
@@ -54,15 +70,16 @@ public class GitHubMessageListener
 				String url      = api.getValue("html_url");
 				String commitID = "`" + api.branch + "`";
 
-				// Get Developer from Commit Author
+				// コミット主からDeveloperを取得
 				Developer dev = Developer.getDevByGitHubName(author);
 
 				if (dev == null)
 				{
+					// 登録がなかった場合はNotAnswer
 					dev = new Developer(0, "N/A");
 				}
 
-				// The Commit is on Target Repo?
+				// 一応チェック
 				if (!embed.getTitle().contains(api.repo)) return;
 
 				StringBuilder builder = new StringBuilder();
@@ -78,19 +95,20 @@ public class GitHubMessageListener
 
 				int fileCount = filenames.length;
 
-				Color color = new Color(0xFFF8F0);
+				Color color = new Color(0xFFF8F0); // 白
 
-				if (fileCount == 2) color = new Color(0x00AA00);
-				if (fileCount == 3) color = new Color(0xFFAA00);
-				if (fileCount >= 4) color = new Color(0xFF5555);
+				// 更新ファイルの数による色の設定
+				if (fileCount == 2) color = new Color(0x00AA00); // 緑
+				if (fileCount == 3) color = new Color(0xFFAA00); // 黄色
+				if (fileCount >= 4) color = new Color(0xFF5555); // 赤
 
 				// ---------------------------------------------
-				// Filecount more than 10
+				// ファイル数が10より多い場合は分割して送信する
 				// ---------------------------------------------
 				if (fileCount > 10)
 				{
 					// ---------------------------------------------
-					// Title and Commit Message EMBED
+					// タイトルとコミットメッセージ
 					EmbedBuilder embed01 = new EmbedBuilder()
 							.withTitle(Language.getMsg(Message.ファイルが更新されました))
 							.appendDesc("```" + summary + "```\n")
@@ -100,13 +118,13 @@ public class GitHubMessageListener
 					// ---------------------------------------------
 
 					// ---------------------------------------------
-					// Get Filename per 10
+					// 10件ごとにファイル名を取得
 					for (int start_fIndex = 0; start_fIndex < fileCount; start_fIndex += 10)
 					{
 						StringBuilder file10 = new StringBuilder();
 
 						// ---------------------------------------------
-						// Get Filename in per_10 + j index
+						// その10件ごと+Jで全て取得
 						for (int j = start_fIndex; j < start_fIndex + 10; j++)
 						{
 							try
@@ -123,7 +141,7 @@ public class GitHubMessageListener
 						// ---------------------------------------------
 
 						// ---------------------------------------------
-						// File names EMBED
+						// ファイル名を表示するだけのEmbed
 						EmbedBuilder embed02 = new EmbedBuilder();
 
 						if (start_fIndex == 0)
@@ -139,7 +157,7 @@ public class GitHubMessageListener
 
 						try
 						{
-							// Wait 1sec for Discord Rate Limit
+							// Discordの送信リミットがあるので1秒待つ
 							Thread.sleep(1000);
 						}
 						catch (InterruptedException e1)
@@ -148,19 +166,20 @@ public class GitHubMessageListener
 					}
 					// ---------------------------------------------
 
+					// 作成
 					EmbedBuilder embed03 = new EmbedBuilder()
 							.appendDesc(":link: **"   + Language.getMsg(Message.詳細) + "**： [" + commitID + "](" + url + ")\n\n")
 							.appendDesc(":bust_in_silhouette: " + dev.mention() + " - " + author)
 							.withFooterText(fDate)
 							.withColor(color);
 
+					// 送信
 					Main.client.getChannelByID(Main.sendChannelId).sendMessage(embed03.build());
-
 					Main.client.getChannelByID(Main.sendChannelId).sendMessage("----------");
 				}
 				else
 				{
-					// if Filecount <= 10
+					// ファイル数が10以下の場合はそのまま
 					EmbedBuilder embedBuilder = new EmbedBuilder()
 							.withTitle(Language.getMsg(Message.ファイルが更新されました))
 							.appendDesc("```" + summary + "```\n")
@@ -175,7 +194,7 @@ public class GitHubMessageListener
 
 				try
 				{
-					// Wait 1sec for Discord Rate Limit
+					// Discordの送信リミットがあるので1秒待つ
 					Thread.sleep(1000);
 				}
 				catch (Exception e1)

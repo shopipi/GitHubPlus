@@ -1,7 +1,16 @@
 package com.github.shopipi.githubplus;
 
+/**
+ *
+ * 日本語と英語の2言語に対応
+ * @author shopipi
+ *
+ */
 public class Language
 {
+	/**
+	 *対応させるメッセージ
+	 */
 	enum Message
 	{
 		Configをロードしました,

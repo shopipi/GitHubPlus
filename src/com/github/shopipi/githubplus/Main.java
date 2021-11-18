@@ -10,6 +10,12 @@ import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.obj.ActivityType;
 import sx.blah.discord.handle.obj.StatusType;
 
+/**
+ *
+ * メインクラス
+ * @author shopipi
+ *
+ */
 public class Main
 {
 	// Bot Client
@@ -49,6 +55,9 @@ public class Main
 		initClient();
 	}
 
+	/**
+	 * Configファイルからの取得結果を表示
+	 */
 	public static void printConfigResult()
 	{
 		Log.INFO("----------------------------------------------------------------------------");
@@ -71,6 +80,9 @@ public class Main
 		Log.INFO("----------------------------------------------------------------------------\n");
 	}
 
+	/**
+	 * Discord BOT Clientの初期化
+	 */
 	private static void initClient()
 	{
 		client = new ClientBuilder().withToken(discordBotToken).build();
